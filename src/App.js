@@ -2,30 +2,28 @@ import { Button, FormControl, InputLabel, Input } from '@material-ui/core';
 import Message from './Message'
 import { useEffect, useState } from 'react';
 import './App.css';
-import db from './firebase';
+import { db, auth } from "./firebase";
 
 function App() {
 
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState([
-    { username: 'atharva', message: 'hey, guys' },
-    { username: 'Abhishek', message: 'Hello' }
-  ]);
+  const [messages, setMessages] = useState([]);
   const [username, setUsername] = useState('');
 
-  useEffect(() => {
-    db.collection('messages').onSnapshot(snapshot => {
-      setMessages(snapshot.docs.map(doc => doc.data()))
-    })
-  }, [])
 
   useEffect(() => {
     setUsername(prompt('Enter your Name'));
   }, [])
 
+  useEffect(() => {
+    db.collection('messages').onSnapshot(snapshot => {
+      setMessages(snapshot.docs.map(doc => doc.data()))
+    });
+  }, [])
+
   const sendMessage = (event) => {
     event.preventDefault();
-    setMessages([...messages, { username: username, text: input }]);
+    setMessages([...messages, { username: username, message: input }]);
     setInput('');
   }
   return (

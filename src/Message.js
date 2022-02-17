@@ -1,5 +1,5 @@
-import { Card, CardContent, Typography } from '@material-ui/core';
 import React from 'react';
+import { Card, CardContent, Typography } from '@material-ui/core';
 import './Message.css';
 
 function Message({ message, username }) {
