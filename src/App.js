@@ -3,6 +3,8 @@ import Message from './Message'
 import { useEffect, useState } from 'react';
 import './App.css';
 import { db, auth } from "./firebase";
+import firebase from 'firebase/compat/app';
+import FlipMove from 'react-flip-move';
 
 function App() {
 
@@ -16,16 +18,25 @@ function App() {
   }, [])
 
   useEffect(() => {
-    db.collection('messages').onSnapshot(snapshot => {
-      setMessages(snapshot.docs.map(doc => doc.data()))
+    db.collection('messages').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+      setMessages(snapshot.docs.map(doc => ({ id: doc.id, message: doc.data() })))
     });
   }, [])
 
+
   const sendMessage = (event) => {
     event.preventDefault();
-    setMessages([...messages, { username: username, message: input }]);
+
+    db.collection('messages').add({
+      message: input,
+      username: username,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    })
+
     setInput('');
   }
+
+
   return (
     <div className="App">
       <h1>Hello Programmers</h1>
@@ -38,11 +49,16 @@ function App() {
         </FormControl>
       </form>
 
-      {
-        messages.map(message => (
-          <Message username={username} message={message} />
-        ))
-      }
+
+      <FlipMove>
+        {
+          messages.map(({ id, message }) => (
+            <Message key={id} username={username} message={message} />
+          ))
+        }
+      </FlipMove>
+
+
     </div>
   );
 }
