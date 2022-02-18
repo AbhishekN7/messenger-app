@@ -1,10 +1,14 @@
-import { Button, FormControl, InputLabel, Input } from '@material-ui/core';
+import { FormControl, Input } from '@material-ui/core';
 import Message from './Message'
 import { useEffect, useState } from 'react';
 import './App.css';
 import { db, auth } from "./firebase";
 import firebase from 'firebase/compat/app';
 import FlipMove from 'react-flip-move';
+import SendIcon from '@material-ui/icons/Send';
+import { IconButton } from '@material-ui/core';
+import messenger from './Img/messenger.png';
+
 
 function App() {
 
@@ -39,15 +43,20 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Hello Programmers</h1>
-      <h2>Welcome {username}</h2>
-      <form>
-        <FormControl>
-          <InputLabel>Enter a message</InputLabel>
-          <Input value={input} onChange={event => setInput(event.target.value)} />
-          <Button disabled={!input} variant="contained" color="primary" type="submit" onClick={sendMessage}>Send Message</Button>
-        </FormControl>
-      </form>
+      <img src={messenger} alt="messenger-logo"></img>
+      <h1>Hello {username}!</h1>
+      <h1>Welcome To The App 🔥</h1>
+      <form className='app__form'>
+        <FormControl className='app__formControl'>
+          <Input className="app__input" placeholder='Enter a message..' value={input} onChange={event => setInput(event.target.value)} />
+
+          <IconButton className='app__iconButton' disabled={!input} variant="contained" color="primary" type="submit" onClick={sendMessage}>
+            <SendIcon />
+          </IconButton>
+
+
+        </FormControl >
+      </form >
 
 
       <FlipMove>
@@ -59,7 +68,7 @@ function App() {
       </FlipMove>
 
 
-    </div>
+    </div >
   );
 }
 
